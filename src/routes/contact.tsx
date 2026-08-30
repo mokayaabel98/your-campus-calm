@@ -86,19 +86,19 @@ function ContactPage() {
             <div className="grid gap-2">
               <Label htmlFor="name">What should we call you?</Label>
               <Input id="name" name="name" placeholder="First name or a display name" />
-              {errors.name ? <p className="text-xs text-destructive">{errors.name}</p> : null}
+              {errors['name'] ? <p className="text-xs text-destructive">{errors['name']}</p> : null}
             </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" name="email" type="email" placeholder="you@university.ac.ke" />
-              {errors.email ? <p className="text-xs text-destructive">{errors.email}</p> : null}
+              {errors['email'] ? <p className="text-xs text-destructive">{errors['email']}</p> : null}
             </div>
           </div>
 
           <div className="mt-5 grid gap-2">
             <Label htmlFor="subject">Subject</Label>
             <Input id="subject" name="subject" placeholder="e.g. Booking a first session" />
-            {errors.subject ? <p className="text-xs text-destructive">{errors.subject}</p> : null}
+            {errors['subject'] ? <p className="text-xs text-destructive">{errors['subject']}</p> : null}
           </div>
 
           <div className="mt-5 grid gap-2">
@@ -110,7 +110,7 @@ function ContactPage() {
               maxLength={1000}
               placeholder="You don't need to explain everything — a sentence is enough."
             />
-            {errors.message ? <p className="text-xs text-destructive">{errors.message}</p> : null}
+            {errors['message'] ? <p className="text-xs text-destructive">{errors['message']}</p> : null}
           </div>
 
           <label className="mt-6 flex cursor-pointer items-start gap-3 rounded-2xl bg-secondary/60 p-4">
