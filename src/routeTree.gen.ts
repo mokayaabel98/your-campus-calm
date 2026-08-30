@@ -11,8 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as PeerCounsellingRouteImport } from './routes/peer-counselling'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProfessionalCounsellingRouteImport } from './routes/professional-counselling'
+import { Route as ResourcesRouteImport } from './routes/resources'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -24,9 +27,19 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PeerCounsellingRoute = PeerCounsellingRouteImport.update({
   id: '/peer-counselling',
   path: '/peer-counselling',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfessionalCounsellingRoute = ProfessionalCounsellingRouteImport.update({
@@ -34,44 +47,78 @@ const ProfessionalCounsellingRoute = ProfessionalCounsellingRouteImport.update({
   path: '/professional-counselling',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResourcesRoute = ResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/faq': typeof FaqRoute
   '/peer-counselling': typeof PeerCounsellingRoute
+  '/privacy': typeof PrivacyRoute
   '/professional-counselling': typeof ProfessionalCounsellingRoute
+  '/resources': typeof ResourcesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/faq': typeof FaqRoute
   '/peer-counselling': typeof PeerCounsellingRoute
+  '/privacy': typeof PrivacyRoute
   '/professional-counselling': typeof ProfessionalCounsellingRoute
+  '/resources': typeof ResourcesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/faq': typeof FaqRoute
   '/peer-counselling': typeof PeerCounsellingRoute
+  '/privacy': typeof PrivacyRoute
   '/professional-counselling': typeof ProfessionalCounsellingRoute
+  '/resources': typeof ResourcesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/peer-counselling' | '/professional-counselling'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/faq'
+    | '/peer-counselling'
+    | '/privacy'
+    | '/professional-counselling'
+    | '/resources'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/peer-counselling' | '/professional-counselling'
+  to:
+    | '/'
+    | '/about'
+    | '/faq'
+    | '/peer-counselling'
+    | '/privacy'
+    | '/professional-counselling'
+    | '/resources'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/faq'
     | '/peer-counselling'
+    | '/privacy'
     | '/professional-counselling'
+    | '/resources'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  FaqRoute: typeof FaqRoute
   PeerCounsellingRoute: typeof PeerCounsellingRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProfessionalCounsellingRoute: typeof ProfessionalCounsellingRoute
+  ResourcesRoute: typeof ResourcesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -90,11 +137,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/peer-counselling': {
       id: '/peer-counselling'
       path: '/peer-counselling'
       fullPath: '/peer-counselling'
       preLoaderRoute: typeof PeerCounsellingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/professional-counselling': {
@@ -104,14 +165,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfessionalCounsellingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/resources': {
+      id: '/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  FaqRoute: FaqRoute,
   PeerCounsellingRoute: PeerCounsellingRoute,
+  PrivacyRoute: PrivacyRoute,
   ProfessionalCounsellingRoute: ProfessionalCounsellingRoute,
+  ResourcesRoute: ResourcesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
