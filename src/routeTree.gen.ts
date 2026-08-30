@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as GetHelpRouteImport } from './routes/get-help'
 import { Route as PeerCounsellingRouteImport } from './routes/peer-counselling'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProfessionalCounsellingRouteImport } from './routes/professional-counselling'
@@ -27,9 +29,19 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GetHelpRoute = GetHelpRouteImport.update({
+  id: '/get-help',
+  path: '/get-help',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PeerCounsellingRoute = PeerCounsellingRouteImport.update({
@@ -56,7 +68,9 @@ const ResourcesRoute = ResourcesRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/get-help': typeof GetHelpRoute
   '/peer-counselling': typeof PeerCounsellingRoute
   '/privacy': typeof PrivacyRoute
   '/professional-counselling': typeof ProfessionalCounsellingRoute
@@ -65,7 +79,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/get-help': typeof GetHelpRoute
   '/peer-counselling': typeof PeerCounsellingRoute
   '/privacy': typeof PrivacyRoute
   '/professional-counselling': typeof ProfessionalCounsellingRoute
@@ -75,7 +91,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/get-help': typeof GetHelpRoute
   '/peer-counselling': typeof PeerCounsellingRoute
   '/privacy': typeof PrivacyRoute
   '/professional-counselling': typeof ProfessionalCounsellingRoute
@@ -86,7 +104,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/contact'
     | '/faq'
+    | '/get-help'
     | '/peer-counselling'
     | '/privacy'
     | '/professional-counselling'
@@ -95,7 +115,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/contact'
     | '/faq'
+    | '/get-help'
     | '/peer-counselling'
     | '/privacy'
     | '/professional-counselling'
@@ -104,7 +126,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/contact'
     | '/faq'
+    | '/get-help'
     | '/peer-counselling'
     | '/privacy'
     | '/professional-counselling'
@@ -114,7 +138,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
+  GetHelpRoute: typeof GetHelpRoute
   PeerCounsellingRoute: typeof PeerCounsellingRoute
   PrivacyRoute: typeof PrivacyRoute
   ProfessionalCounsellingRoute: typeof ProfessionalCounsellingRoute
@@ -137,11 +163,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/faq': {
       id: '/faq'
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/get-help': {
+      id: '/get-help'
+      path: '/get-help'
+      fullPath: '/get-help'
+      preLoaderRoute: typeof GetHelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/peer-counselling': {
@@ -178,7 +218,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
+  GetHelpRoute: GetHelpRoute,
   PeerCounsellingRoute: PeerCounsellingRoute,
   PrivacyRoute: PrivacyRoute,
   ProfessionalCounsellingRoute: ProfessionalCounsellingRoute,
