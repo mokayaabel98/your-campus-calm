@@ -10,33 +10,141 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as GetHelpRouteImport } from './routes/get-help'
+import { Route as PeerCounsellingRouteImport } from './routes/peer-counselling'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ProfessionalCounsellingRouteImport } from './routes/professional-counselling'
+import { Route as ResourcesRouteImport } from './routes/resources'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GetHelpRoute = GetHelpRouteImport.update({
+  id: '/get-help',
+  path: '/get-help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PeerCounsellingRoute = PeerCounsellingRouteImport.update({
+  id: '/peer-counselling',
+  path: '/peer-counselling',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfessionalCounsellingRoute = ProfessionalCounsellingRouteImport.update({
+  id: '/professional-counselling',
+  path: '/professional-counselling',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResourcesRoute = ResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/get-help': typeof GetHelpRoute
+  '/peer-counselling': typeof PeerCounsellingRoute
+  '/privacy': typeof PrivacyRoute
+  '/professional-counselling': typeof ProfessionalCounsellingRoute
+  '/resources': typeof ResourcesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/get-help': typeof GetHelpRoute
+  '/peer-counselling': typeof PeerCounsellingRoute
+  '/privacy': typeof PrivacyRoute
+  '/professional-counselling': typeof ProfessionalCounsellingRoute
+  '/resources': typeof ResourcesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/get-help': typeof GetHelpRoute
+  '/peer-counselling': typeof PeerCounsellingRoute
+  '/privacy': typeof PrivacyRoute
+  '/professional-counselling': typeof ProfessionalCounsellingRoute
+  '/resources': typeof ResourcesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/faq'
+    | '/get-help'
+    | '/peer-counselling'
+    | '/privacy'
+    | '/professional-counselling'
+    | '/resources'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/faq'
+    | '/get-help'
+    | '/peer-counselling'
+    | '/privacy'
+    | '/professional-counselling'
+    | '/resources'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/faq'
+    | '/get-help'
+    | '/peer-counselling'
+    | '/privacy'
+    | '/professional-counselling'
+    | '/resources'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
+  GetHelpRoute: typeof GetHelpRoute
+  PeerCounsellingRoute: typeof PeerCounsellingRoute
+  PrivacyRoute: typeof PrivacyRoute
+  ProfessionalCounsellingRoute: typeof ProfessionalCounsellingRoute
+  ResourcesRoute: typeof ResourcesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +156,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/get-help': {
+      id: '/get-help'
+      path: '/get-help'
+      fullPath: '/get-help'
+      preLoaderRoute: typeof GetHelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/peer-counselling': {
+      id: '/peer-counselling'
+      path: '/peer-counselling'
+      fullPath: '/peer-counselling'
+      preLoaderRoute: typeof PeerCounsellingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/professional-counselling': {
+      id: '/professional-counselling'
+      path: '/professional-counselling'
+      fullPath: '/professional-counselling'
+      preLoaderRoute: typeof ProfessionalCounsellingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resources': {
+      id: '/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
+  GetHelpRoute: GetHelpRoute,
+  PeerCounsellingRoute: PeerCounsellingRoute,
+  PrivacyRoute: PrivacyRoute,
+  ProfessionalCounsellingRoute: ProfessionalCounsellingRoute,
+  ResourcesRoute: ResourcesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
