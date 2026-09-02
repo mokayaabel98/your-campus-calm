@@ -21,6 +21,7 @@ import { Route as PeerCounsellingRouteImport } from './routes/peer-counselling'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProfessionalCounsellingRouteImport } from './routes/professional-counselling'
 import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa/callback'
 
@@ -83,6 +84,11 @@ const ResourcesRoute = ResourcesRouteImport.update({
   path: '/resources',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/professional-counselling': typeof ProfessionalCounsellingRoute
   '/resources': typeof ResourcesRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
 }
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/professional-counselling': typeof ProfessionalCounsellingRoute
   '/resources': typeof ResourcesRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
 }
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/professional-counselling': typeof ProfessionalCounsellingRoute
   '/resources': typeof ResourcesRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
 }
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/professional-counselling'
     | '/resources'
+    | '/admin'
     | '/dashboard'
     | '/api/public/mpesa/callback'
   fileRoutesByTo: FileRoutesByTo
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/professional-counselling'
     | '/resources'
+    | '/admin'
     | '/dashboard'
     | '/api/public/mpesa/callback'
   id:
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/professional-counselling'
     | '/resources'
+    | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/api/public/mpesa/callback'
   fileRoutesById: FileRoutesById
@@ -292,6 +304,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResourcesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -310,10 +329,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
 }
 
