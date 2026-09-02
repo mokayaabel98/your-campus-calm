@@ -66,7 +66,7 @@ export async function stkPush(opts: {
       PhoneNumber: opts.phone,
       CallBackURL: opts.callbackUrl,
       AccountReference: opts.reference.slice(0, 12),
-      TransactionDesc: opts.description.slice(0, derivedMax),
+      TransactionDesc: opts.description.slice(0, 40),
     }),
   });
 
@@ -84,5 +84,3 @@ export async function stkPush(opts: {
     customerMessage: String(json["CustomerMessage"] ?? "Check your phone for the M-Pesa prompt"),
   };
 }
-
-const derivedMax = 40;
