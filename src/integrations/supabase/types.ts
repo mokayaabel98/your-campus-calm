@@ -253,11 +253,17 @@ export type Database = {
         Row: {
           amount_kes: number
           appointment_id: string | null
+          checkout_request_id: string | null
           created_at: string
           currency: string
           id: string
+          merchant_request_id: string | null
           method: Database["public"]["Enums"]["payment_method"]
+          paid_at: string | null
+          phone: string | null
+          receipt_number: string | null
           reference: string
+          result_desc: string | null
           status: Database["public"]["Enums"]["payment_status"]
           student_id: string
           updated_at: string
@@ -265,11 +271,17 @@ export type Database = {
         Insert: {
           amount_kes?: number
           appointment_id?: string | null
+          checkout_request_id?: string | null
           created_at?: string
           currency?: string
           id?: string
+          merchant_request_id?: string | null
           method?: Database["public"]["Enums"]["payment_method"]
+          paid_at?: string | null
+          phone?: string | null
+          receipt_number?: string | null
           reference?: string
+          result_desc?: string | null
           status?: Database["public"]["Enums"]["payment_status"]
           student_id: string
           updated_at?: string
@@ -277,11 +289,17 @@ export type Database = {
         Update: {
           amount_kes?: number
           appointment_id?: string | null
+          checkout_request_id?: string | null
           created_at?: string
           currency?: string
           id?: string
+          merchant_request_id?: string | null
           method?: Database["public"]["Enums"]["payment_method"]
+          paid_at?: string | null
+          phone?: string | null
+          receipt_number?: string | null
           reference?: string
+          result_desc?: string | null
           status?: Database["public"]["Enums"]["payment_status"]
           student_id?: string
           updated_at?: string
