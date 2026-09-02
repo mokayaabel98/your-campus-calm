@@ -1,9 +1,12 @@
-import { Link } from "@tanstack/react-router";
-import { Menu, LifeBuoy } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { Menu, LifeBuoy, LayoutDashboard, ShieldCheck, LogOut } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -18,6 +21,27 @@ const nav = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const isAdmin = useQuery({
+    queryKey: ["is-admin", user?.id],
+    enabled: Boolean(user?.id),
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("has_role", {
+        _user_id: user!.id,
+        _role: "admin",
+      });
+      if (error) return false;
+      return Boolean(data);
+    },
+  });
+
+  async function signOut() {
+    await supabase.auth.signOut();
+    setOpen(false);
+    navigate({ to: "/" });
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
@@ -44,9 +68,29 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2.5">
-          <Button asChild variant="soft" size="pill" className="hidden sm:inline-flex">
-            <Link to="/peer-counselling">Talk to a Peer</Link>
-          </Button>
+          {user ? (
+            <>
+              {isAdmin.data ? (
+                <Button asChild variant="ghost" size="pill" className="hidden md:inline-flex">
+                  <Link to="/admin">
+                    <ShieldCheck className="size-4" /> Admin
+                  </Link>
+                </Button>
+              ) : null}
+              <Button asChild variant="soft" size="pill" className="hidden sm:inline-flex">
+                <Link to="/dashboard">
+                  <LayoutDashboard className="size-4" /> Dashboard
+                </Link>
+              </Button>
+              <Button variant="ghost" size="icon" aria-label="Sign out" onClick={signOut}>
+                <LogOut className="size-4" />
+              </Button>
+            </>
+          ) : (
+            <Button asChild variant="soft" size="pill" className="hidden sm:inline-flex">
+              <Link to="/auth">Sign in</Link>
+            </Button>
+          )}
           <Button asChild variant="brand" size="pill">
             <Link to="/book">Book a Session</Link>
           </Button>
@@ -71,6 +115,40 @@ export function SiteHeader() {
                     {item.label}
                   </Link>
                 ))}
+                {user ? (
+                  <>
+                    <Link
+                      to="/dashboard"
+                      onClick={() => setOpen(false)}
+                      className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                    >
+                      Dashboard
+                    </Link>
+                    {isAdmin.data ? (
+                      <Link
+                        to="/admin"
+                        onClick={() => setOpen(false)}
+                        className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                      >
+                        Admin
+                      </Link>
+                    ) : null}
+                    <button
+                      onClick={signOut}
+                      className="rounded-lg px-3 py-2.5 text-left text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                    >
+                      Sign out
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    to="/auth"
+                    onClick={() => setOpen(false)}
+                    className="rounded-lg px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                  >
+                    Sign in
+                  </Link>
+                )}
                 <Link
                   to="/get-help"
                   onClick={() => setOpen(false)}
