@@ -271,12 +271,10 @@ function AdminPage() {
                 className="flex flex-wrap items-center justify-between gap-4 rounded-3xl bg-card p-6 ring-1 ring-border"
               >
                 <div>
-                  <p className="font-medium">
-                    {c.display_name}{" "}
-                    <Badge variant="secondary" className="ml-1 align-middle">
-                      {c.kind}
-                    </Badge>
-                  </p>
+                  <div className="flex flex-wrap items-center gap-2 font-medium">
+                    {c.display_name}
+                    <Badge variant="secondary">{c.kind}</Badge>
+                  </div>
                   <p className="mt-1 text-sm text-muted-foreground">
                     {c.title} · {formatKes(c.session_fee_kes)}
                   </p>
