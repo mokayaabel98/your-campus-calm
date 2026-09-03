@@ -5,6 +5,7 @@ import { Bell, CalendarDays, CreditCard, LogOut, UserCog } from "lucide-react";
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/site/PageHeader";
+import { MpesaPayButton } from "@/components/site/MpesaPayButton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
