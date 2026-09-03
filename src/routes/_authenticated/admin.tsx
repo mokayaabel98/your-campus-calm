@@ -135,7 +135,11 @@ function AdminPage() {
     mutationFn: async (input: { id: string; field: "is_approved" | "is_active"; value: boolean }) => {
       const { error } = await supabase
         .from("counsellors")
-        .update({ [input.field]: input.value })
+        .update(
+          input.field === "is_approved"
+            ? { is_approved: input.value }
+            : { is_active: input.value },
+        )
         .eq("id", input.id);
       if (error) throw error;
     },

@@ -160,7 +160,10 @@ function Dashboard() {
       })
       .eq("id", auth.user?.id ?? "");
     setSaving(false);
-    if (error) return toast.error("Could not save", { description: error.message });
+    if (error) {
+      toast.error("Could not save", { description: error.message });
+      return;
+    }
     toast.success("Preferences saved");
     qc.invalidateQueries({ queryKey: ["my-profile"] });
   }
