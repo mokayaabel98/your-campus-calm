@@ -63,7 +63,10 @@ function AuthPage() {
       password: String(form.get("password") ?? ""),
     });
     setBusy(false);
-    if (error) return toast.error("Could not sign in", { description: error.message });
+    if (error) {
+      toast.error("Could not sign in", { description: error.message });
+      return;
+    }
     toast.success("Welcome back");
   }
 
