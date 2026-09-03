@@ -143,7 +143,10 @@ function BookPage() {
     setConsent(false);
     slots.refetch();
     toast.success("Session requested", {
-      description: "You can see it in your dashboard. We confirm within one working day.",
+      description:
+        fee > 0
+          ? `Pay ${formatKes(fee)} with M-Pesa from the Payments tab in your dashboard.`
+          : "You can see it in your dashboard. We confirm within one working day.",
     });
     navigate({ to: "/dashboard" });
   }
