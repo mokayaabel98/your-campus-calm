@@ -299,7 +299,17 @@ function Dashboard() {
                     Ref {p.reference} · {p.method}
                   </p>
                 </div>
-                <Badge variant={p.status === "paid" ? "default" : "secondary"}>{p.status}</Badge>
+                <div className="flex items-center gap-3">
+                  <Badge variant={p.status === "paid" ? "default" : "secondary"}>{p.status}</Badge>
+                  {p.status !== "paid" && p.status !== "waived" && p.method === "mpesa" ? (
+                    <MpesaPayButton
+                      paymentId={p.id}
+                      amountKes={p.amount_kes}
+                      defaultPhone={profile.data?.phone ?? null}
+                      onPaid={() => payments.refetch()}
+                    />
+                  ) : null}
+                </div>
               </div>
             ))}
           </TabsContent>
