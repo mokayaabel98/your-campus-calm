@@ -63,7 +63,10 @@ function AuthPage() {
       password: String(form.get("password") ?? ""),
     });
     setBusy(false);
-    if (error) return toast.error("Could not sign in", { description: error.message });
+    if (error) {
+      toast.error("Could not sign in", { description: error.message });
+      return;
+    }
     toast.success("Welcome back");
   }
 
@@ -73,9 +76,10 @@ function AuthPage() {
     const password = String(form.get("password") ?? "");
     const parsed = passwordSchema.safeParse(password);
     if (!parsed.success) {
-      return toast.error("Choose a stronger password", {
+      toast.error("Choose a stronger password", {
         description: parsed.error.issues[0]?.message,
       });
+      return;
     }
     setBusy(true);
     const { error } = await supabase.auth.signUp({
@@ -87,7 +91,10 @@ function AuthPage() {
       },
     });
     setBusy(false);
-    if (error) return toast.error("Could not create account", { description: error.message });
+    if (error) {
+      toast.error("Could not create account", { description: error.message });
+      return;
+    }
     toast.success("Account created", {
       description: "If email confirmation is required, check your inbox to finish signing in.",
     });

@@ -5,6 +5,7 @@ import { Bell, CalendarDays, CreditCard, LogOut, UserCog } from "lucide-react";
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/site/PageHeader";
+import { MpesaPayButton } from "@/components/site/MpesaPayButton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -159,7 +160,10 @@ function Dashboard() {
       })
       .eq("id", auth.user?.id ?? "");
     setSaving(false);
-    if (error) return toast.error("Could not save", { description: error.message });
+    if (error) {
+      toast.error("Could not save", { description: error.message });
+      return;
+    }
     toast.success("Preferences saved");
     qc.invalidateQueries({ queryKey: ["my-profile"] });
   }
@@ -299,7 +303,17 @@ function Dashboard() {
                     Ref {p.reference} · {p.method}
                   </p>
                 </div>
-                <Badge variant={p.status === "paid" ? "default" : "secondary"}>{p.status}</Badge>
+                <div className="flex items-center gap-3">
+                  <Badge variant={p.status === "paid" ? "default" : "secondary"}>{p.status}</Badge>
+                  {p.status !== "paid" && p.status !== "waived" && p.method === "mpesa" ? (
+                    <MpesaPayButton
+                      paymentId={p.id}
+                      amountKes={p.amount_kes}
+                      defaultPhone={profile.data?.phone ?? null}
+                      onPaid={() => payments.refetch()}
+                    />
+                  ) : null}
+                </div>
               </div>
             ))}
           </TabsContent>
