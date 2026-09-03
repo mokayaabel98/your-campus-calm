@@ -69,7 +69,10 @@ export function MpesaPayButton({ paymentId, amountKes, defaultPhone, onPaid }: P
     setBusy(true);
     const result = await initiate({ data: { paymentId, phone } });
     setBusy(false);
-    if (!result.ok) return toast.error(result.message);
+    if (!result.ok) {
+      toast.error(result.message);
+      return;
+    }
     toast.success("Check your phone", { description: result.message });
     startPolling();
   }
