@@ -89,9 +89,9 @@ const guides: Guide[] = [
           "Writing down specific worries on paper before studying empties working memory space, freeing up mental bandwidth for complex problem-solving.",
       },
       {
-        label: "Targeted Support:",
+        label: "Targeted Support:\n\nu",
         detail:
-          "",
+          "Utilizing dedicated quite areas for reflection or connecting early with campus academic advisors and counselors before burnout sets in. ",
       },
     ],
   },
