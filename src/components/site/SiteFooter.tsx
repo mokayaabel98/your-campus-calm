@@ -37,8 +37,8 @@ export function SiteFooter() {
             <span className="font-display text-lg font-semibold tracking-tight">Willow</span>
           </span>
           <p className="mt-4 max-w-[34ch] text-sm leading-relaxed text-muted-foreground text-pretty">
-            A safe digital wellbeing centre for university and college students — professional
-            counselling and trained peer support, privately and without judgement.
+            A safe digital wellbeing centre for university and college students, enabling acess to
+            professional counselling and trained peer support, privately and without judgement.
           </p>
           <div className="mt-5 flex gap-2.5">
             {socials.map(({ label, href, icon: Icon }) => (
@@ -75,14 +75,12 @@ export function SiteFooter() {
           <ul className="mt-4 space-y-3 text-muted-foreground">
             <li className="flex gap-2.5">
               <Mail className="mt-0.5 size-4 shrink-0" />
-              <a href="mailto:support@willowwellbeing.co.ke" className="hover:text-foreground">
-                support@willowwellbeing.co.ke
-              </a>
+              <a href="mailto:support@willowwellbeing.co.ke" className="hover:text-foreground"></a>
             </li>
             <li className="flex gap-2.5">
               <Phone className="mt-0.5 size-4 shrink-0" />
               <a href="tel:+254207640000" className="hover:text-foreground">
-                +254 20 764 0000
+                +254 701203242
               </a>
             </li>
             <li className="flex gap-2.5">
@@ -93,7 +91,7 @@ export function SiteFooter() {
                 rel="noreferrer noopener"
                 className="hover:text-foreground"
               >
-                WhatsApp +254 20 764 0000
+                WhatsApp +254 701203242
               </a>
             </li>
             <li className="flex gap-2.5">
@@ -101,7 +99,7 @@ export function SiteFooter() {
               <span>
                 Campus Wellbeing Centre, Gate 4
                 <br />
-                Off Harry Thuku Road, Nairobi
+                off Nyeri-Mweiga Road, Kenya
               </span>
             </li>
             <li className="flex gap-2.5">
@@ -110,6 +108,8 @@ export function SiteFooter() {
                 Mon–Fri 8:00–18:00 · Sat 9:00–13:00
                 <br />
                 Closed Sundays &amp; public holidays
+                <br />
+                Online support available 24/7
               </span>
             </li>
           </ul>
