@@ -91,7 +91,7 @@ const guides: Guide[] = [
       {
         label: "Targeted Support:",
         detail:
-          "",
+          "Utilizing dedicated quite areas for reflection or connecting early with campus academic advisors and counselors before burnout sets in. ",
       },
     ],
   },
