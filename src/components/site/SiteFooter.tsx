@@ -76,8 +76,6 @@ export function SiteFooter() {
             <li className="flex gap-2.5">
               <Mail className="mt-0.5 size-4 shrink-0" />
               <a href="mailto:support.campuswell@gmail.com" className="hover:text-foreground">
-                hh
-                <br />
                 support.campuswell@gmail.com
               </a>
             </li>
