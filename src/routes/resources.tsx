@@ -74,24 +74,24 @@ const guides: Guide[] = [
     ],
     practice: [
       {
-        label: "Physiological sigh (60 seconds)",
+        label: "Strategic Micro-Breaks:",
         detail:
-          "Two inhales through the nose — one long, one short top-up — then a slow extended exhale through the mouth. Repeat five times. Lengthening the exhale raises vagal tone and drops heart rate faster than counting breaths.",
+          "Switch tasks every 45–50 minutes. Moving around or stepping away resets cognitive fatigue faster than passive scrolling.",
       },
       {
-        label: "Time-boxing over task lists",
+        label: "Physiological Sighs:",
         detail:
-          "Work in 45-minute blocks with a fixed, single objective and a 10-minute break away from screens. Specificity ('draft section 2 intro') beats volume ('do essay') because the brain can register completion.",
+          "Two quick inhales through the nose followed by a long exhale through the mouth rapidly lowers heart rate and offloads carbon dioxide during acute panic.",
       },
       {
-        label: "Worry postponement",
+        label: "Brain Dumps:",
         detail:
-          "Book a 15-minute 'worry window' each day and write intrusive thoughts down until then. Trials of stimulus-control worry scheduling show reduced total worry time within two weeks.",
+          "Writing down specific worries on paper before studying empties working memory space, freeing up mental bandwidth for complex problem-solving.",
       },
       {
-        label: "Move before you study",
+        label: "Targeted Support:",
         detail:
-          "Twenty minutes of brisk walking raises BDNF and measurably improves attention on the task that follows. It is preparation, not procrastination.",
+          "",
       },
     ],
   },
