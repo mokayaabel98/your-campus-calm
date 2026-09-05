@@ -65,7 +65,7 @@ const guides: Guide[] = [
     summary:
       "Stress is your body preparing for a demand. In short bursts it sharpens attention and memory; sustained for weeks it does the opposite.",
     science:
-      "A deadline triggers the hypothalamic–pituitary–adrenal axis, releasing adrenaline and cortisol: heart rate rises, digestion slows, and the brain prioritises threat detection over the prefrontal cortex you need for essay planning. The Yerkes–Dodson curve describes the result — performance climbs with arousal up to a point, then falls sharply. Chronic cortisol elevation impairs hippocampal memory consolidation, which is why revision done in a panic tends not to stick.",
+      "1. The Biological Trade-off: Acute stress releases cortisol to fuel immediate focus. Chronic stress keeps cortisol elevated, which actively shrinks dendrites in the hippocampus—the brain's primary hub for forming new memories.\n\n2. The Sleep-Performance Trap: Elevated stress disrupts deep sleep cycles. Without adequate slow-wave sleep, the brain cannot clear metabolic waste or consolidate information learned during the day, making study sessions significantly less effective.\n\n3. The \"Inverted-U\" Peak: Performance improves with arousal up to an optimal point (the Yerkes-Dodson Law). Beyond that inflection point, anxiety overwhelms executive functioning and working memory capacity drops.",
     signs: [
       "Reading the same paragraph repeatedly without absorbing it",
       "Tension headaches, jaw clenching, stomach upset before class",
