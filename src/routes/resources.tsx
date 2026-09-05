@@ -67,9 +67,9 @@ const guides: Guide[] = [
     science:
       "1. The Biological Trade-off: Acute stress releases cortisol to fuel immediate focus. Chronic stress keeps cortisol elevated, which actively shrinks dendrites in the hippocampus—the brain's primary hub for forming new memories.\n\n2. The Sleep-Performance Trap: Elevated stress disrupts deep sleep cycles. Without adequate slow-wave sleep, the brain cannot clear metabolic waste or consolidate information learned during the day, making study sessions significantly less effective.\n\n3. The \"Inverted-U\" Peak: Performance improves with arousal up to an optimal point (the Yerkes-Dodson Law). Beyond that inflection point, anxiety overwhelms executive functioning and working memory capacity drops.",
     signs: [
-      "Reading the same paragraph repeatedly without absorbing it",
-      "Tension headaches, jaw clenching, stomach upset before class",
-      "Sleeping less while working more, with less produced per hour",
+      "Cognitive: Brain fog, re-reading the same page three times without absorbing it, and sudden memory blanks during exams.",
+      "Physical: Constant jaw clenching, tension headaches, shallow breathing, and persistent digestive issues.",
+      "Behavioral: Procrastinating by hyper-focusing on low-priority tasks, isolation, or feeling irritable over minor academic setbacks.",
       "Irritability with friends, flatmates or family over small things",
     ],
     practice: [
