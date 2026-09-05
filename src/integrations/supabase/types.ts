@@ -222,6 +222,66 @@ export type Database = {
         }
         Relationships: []
       }
+      donations: {
+        Row: {
+          amount: number
+          checkout_request_id: string | null
+          created_at: string
+          currency: string
+          donor_email: string | null
+          donor_name: string | null
+          id: string
+          message: string | null
+          method: string
+          paid_at: string | null
+          phone: string | null
+          receipt_number: string | null
+          reference: string
+          result_desc: string | null
+          status: string
+          tier: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          checkout_request_id?: string | null
+          created_at?: string
+          currency?: string
+          donor_email?: string | null
+          donor_name?: string | null
+          id?: string
+          message?: string | null
+          method?: string
+          paid_at?: string | null
+          phone?: string | null
+          receipt_number?: string | null
+          reference?: string
+          result_desc?: string | null
+          status?: string
+          tier?: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          checkout_request_id?: string | null
+          created_at?: string
+          currency?: string
+          donor_email?: string | null
+          donor_name?: string | null
+          id?: string
+          message?: string | null
+          method?: string
+          paid_at?: string | null
+          phone?: string | null
+          receipt_number?: string | null
+          reference?: string
+          result_desc?: string | null
+          status?: string
+          tier?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           body: string | null
@@ -415,6 +475,10 @@ export type Database = {
       is_my_counsellor_record: {
         Args: { _counsellor_id: string }
         Returns: boolean
+      }
+      notify_admins: {
+        Args: { _body: string; _title: string }
+        Returns: undefined
       }
     }
     Enums: {

@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.notify_admins(text, text) FROM anon, authenticated;
