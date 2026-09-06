@@ -28,12 +28,12 @@ const values = [
   {
     icon: Compass,
     title: "Our mission",
-    body: "To make asking for help the easiest thing a student does all week — private, affordable and free of judgement.",
+    body: "To create a safe and accessible support system where every university and college student can ask for help early, privately and without judgement. We connect students with professional counselling, trained peer support and practical wellbeing resources so that cost, stigma or uncertainty never has to become a barrier to care.",
   },
   {
     icon: HeartHandshake,
     title: "Our vision",
-    body: "A campus where wellbeing support is as ordinary and available as the library, and where no student carries things alone.",
+    body: "A campus community where mental health support is trusted, inclusive and as easy to access as any other essential student service; where seeking help is viewed as a strength, and no student has to carry difficult experiences alone.",
   },
   {
     icon: GraduationCap,
@@ -52,8 +52,8 @@ function AboutPage() {
     <>
       <PageHeader
         eyebrow="About us"
-        title="A digital wellbeing centre, built around student dignity"
-        intro="Willow began with a simple observation: students often know they need to talk long before they feel able to walk into an office. So we built a door that is easier to open — and just as private once it closes."
+        title="About Us: Our Mission and Vision"
+        intro="Willow exists to create a safe, accessible support system for university and college students. We make it easier to reach qualified counsellors, trained peers and reliable mental health guidance in a private, respectful setting, helping students seek support before challenges become overwhelming."
       />
 
       <section className="mx-auto max-w-6xl px-5 py-16">
