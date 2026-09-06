@@ -140,11 +140,11 @@ function ContactPage() {
               </li>
               <li className="flex gap-3">
                 <Phone className="size-4 shrink-0 text-primary-deep" />
-                +254 20 000 0000
+                <a href="tel:+254200000000" className="hover:text-primary">+254 20 000 0000</a>
               </li>
               <li className="flex gap-3">
                 <Mail className="size-4 shrink-0 text-primary-deep" />
-                wellbeing@willow.ac.ke
+                <a href="mailto:wellbeing@willow.ac.ke" className="hover:text-primary">wellbeing@willow.ac.ke</a>
               </li>
               <li className="flex gap-3">
                 <Clock className="size-4 shrink-0 text-primary-deep" />
@@ -166,8 +166,8 @@ function ContactPage() {
           <div className="rounded-3xl bg-urgent-soft p-7 ring-1 ring-urgent/30">
             <h2 className="text-xl font-medium text-urgent-foreground">In an emergency</h2>
             <p className="mt-2 text-sm leading-relaxed text-foreground/80 text-pretty">
-              This form is not monitored around the clock. Call 999 or 112, or the free 24-hour
-              emotional support line on 1199.
+              This form is not monitored around the clock. Call <a href="tel:999" className="font-medium underline underline-offset-4">999</a> or <a href="tel:112" className="font-medium underline underline-offset-4">112</a>, or the free 24-hour
+              emotional support line on <a href="tel:1199" className="font-medium underline underline-offset-4">1199</a>.
             </p>
           </div>
         </div>

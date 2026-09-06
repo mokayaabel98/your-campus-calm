@@ -13,7 +13,7 @@ const socials = [
     icon: Instagram,
   },
   { label: "TikTok", href: "https://www.tiktok.com/@willowwellbeing", icon: Music2 },
-  { label: "WhatsApp", href: "https://wa.me/254207640000", icon: MessageCircle },
+  { label: "WhatsApp", href: "https://wa.me/254701203242", icon: MessageCircle },
 ];
 
 const pages = [
@@ -21,7 +21,7 @@ const pages = [
   { to: "/peer-counselling", label: "Peer counselling" },
   { to: "/resources", label: "Mental health resources" },
   { to: "/book", label: "Book a session" },
-  { to: "/about", label: "About us" },
+  { to: "/about", label: "About us" }, { to: "/donate", label: "Donate" },
   { to: "/faq", label: "FAQ" },
 ] as const;
 
@@ -81,19 +81,19 @@ export function SiteFooter() {
             </li>
             <li className="flex gap-2.5">
               <Phone className="mt-0.5 size-4 shrink-0" />
-              <a href="tel:+254207640000" className="hover:text-foreground">
-                +254 701203242
+              <a href="tel:+254701203242" className="hover:text-foreground">
+                +254 701 203 242
               </a>
             </li>
             <li className="flex gap-2.5">
               <MessageCircle className="mt-0.5 size-4 shrink-0" />
               <a
-                href="https://wa.me/254207640000"
+                href="https://wa.me/254701203242"
                 target="_blank"
                 rel="noreferrer noopener"
                 className="hover:text-foreground"
               >
-                WhatsApp +254 701203242
+                WhatsApp +254 701 203 242
               </a>
             </li>
             <li className="flex gap-2.5">
