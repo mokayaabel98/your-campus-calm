@@ -26,19 +26,19 @@ const lines = [
   {
     icon: Phone,
     label: "Emergency services",
-    value: "999 or 112",
+    value: "999 or 112", href: "tel:999",
     body: "If you or someone else is in immediate physical danger, call now.",
   },
   {
     icon: MessageSquare,
     label: "Kenya Red Cross emotional support",
-    value: "1199",
+    value: "1199", href: "tel:1199",
     body: "Free, confidential, 24 hours a day, from any network.",
   },
   {
     icon: Users,
     label: "Befrienders Kenya",
-    value: "+254 722 178 177",
+    value: "+254 722 178 177", href: "tel:+254722178177",
     body: "Trained volunteers for anyone in emotional distress or feeling suicidal.",
   },
   {
@@ -69,13 +69,13 @@ function GetHelpPage() {
 
       <section className="mx-auto max-w-6xl px-5 py-16">
         <div className="grid gap-5 sm:grid-cols-2">
-          {lines.map(({ icon: Icon, label, value, body }) => (
+          {lines.map(({ icon: Icon, label, value, body, href }) => (
             <article key={label} className="rounded-3xl bg-card p-7 ring-1 ring-border">
               <span className="grid size-11 place-items-center rounded-full bg-urgent-soft text-urgent-foreground">
                 <Icon className="size-5" />
               </span>
               <h2 className="mt-4 text-lg font-medium">{label}</h2>
-              <p className="mt-1 font-display text-2xl font-semibold text-primary-deep">{value}</p>
+              <p className="mt-1 font-display text-2xl font-semibold text-primary-deep">{href ? <a href={href} className="hover:underline">{value}</a> : value}</p>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground text-pretty">
                 {body}
               </p>

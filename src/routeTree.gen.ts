@@ -15,6 +15,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BookRouteImport } from './routes/book'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DonateRouteImport } from './routes/donate'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GetHelpRouteImport } from './routes/get-help'
 import { Route as PeerCounsellingRouteImport } from './routes/peer-counselling'
@@ -53,6 +54,11 @@ const BookRoute = BookRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DonateRoute = DonateRouteImport.update({
+  id: '/donate',
+  path: '/donate',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -112,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/book': typeof BookRoute
   '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
   '/faq': typeof FaqRoute
   '/get-help': typeof GetHelpRoute
   '/peer-counselling': typeof PeerCounsellingRoute
@@ -129,6 +136,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/book': typeof BookRoute
   '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
   '/faq': typeof FaqRoute
   '/get-help': typeof GetHelpRoute
   '/peer-counselling': typeof PeerCounsellingRoute
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/book': typeof BookRoute
   '/contact': typeof ContactRoute
+  '/donate': typeof DonateRoute
   '/faq': typeof FaqRoute
   '/get-help': typeof GetHelpRoute
   '/peer-counselling': typeof PeerCounsellingRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/book'
     | '/contact'
+    | '/donate'
     | '/faq'
     | '/get-help'
     | '/peer-counselling'
@@ -184,6 +194,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/book'
     | '/contact'
+    | '/donate'
     | '/faq'
     | '/get-help'
     | '/peer-counselling'
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/book'
     | '/contact'
+    | '/donate'
     | '/faq'
     | '/get-help'
     | '/peer-counselling'
@@ -221,6 +233,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BookRoute: typeof BookRoute
   ContactRoute: typeof ContactRoute
+  DonateRoute: typeof DonateRoute
   FaqRoute: typeof FaqRoute
   GetHelpRoute: typeof GetHelpRoute
   PeerCounsellingRoute: typeof PeerCounsellingRoute
@@ -273,6 +286,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/donate': {
+      id: '/donate'
+      path: '/donate'
+      fullPath: '/donate'
+      preLoaderRoute: typeof DonateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -368,6 +388,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BookRoute: BookRoute,
   ContactRoute: ContactRoute,
+  DonateRoute: DonateRoute,
   FaqRoute: FaqRoute,
   GetHelpRoute: GetHelpRoute,
   PeerCounsellingRoute: PeerCounsellingRoute,
