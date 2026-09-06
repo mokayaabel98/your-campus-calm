@@ -104,7 +104,7 @@ const rights = [
   },
   {
     title: "Right to complain",
-    body: "You can complain to the Willow Data Protection Officer at privacy@willowwellbeing.co.ke and, separately, to the Office of the Data Protection Commissioner in Kenya. You will never be penalised, deprioritised or refused support for making a complaint.",
+    body: "You can complain to the Willow Data Protection Officer at support.campuswell@gmail.com and, separately, to the Office of the Data Protection Commissioner in Kenya. You will never be penalised, deprioritised or refused support for making a complaint.",
   },
 ];
 
@@ -222,7 +222,7 @@ function PrivacyPage() {
           </Button>
           <p className="mt-5 text-xs text-muted-foreground">
             Notice last updated 1 September 2026. Data Protection Officer:
-            privacy@willowwellbeing.co.ke · +254 20 764 0000.
+            support.campuswell@gmail.com · +254701203242.
           </p>
         </div>
       </section>
