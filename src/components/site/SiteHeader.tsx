@@ -16,7 +16,7 @@ const nav = [
   { to: "/privacy", label: "Privacy" },
   { to: "/about", label: "About" },
   { to: "/faq", label: "FAQ" },
-  { to: "/contact", label: "Contact" },
+  { to: "/contact", label: "Contact" }, { to: "/donate", label: "Donate" },
 ] as const;
 
 export function SiteHeader() {
