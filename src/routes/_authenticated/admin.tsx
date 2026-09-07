@@ -286,6 +286,15 @@ function AdminPage() {
     { label: "Assistance requests", value: String((assistance.data ?? []).length) },
   ];
 
+  const team = counsellors.data ?? [];
+  const teamCounts = [
+    { label: "Total team", value: String(team.length) },
+    { label: "Professional", value: String(team.filter((c) => c.kind === "professional").length) },
+    { label: "Peer", value: String(team.filter((c) => c.kind === "peer").length) },
+    { label: "Approved", value: String(team.filter((c) => c.is_approved).length) },
+    { label: "Active", value: String(team.filter((c) => c.is_active).length) },
+  ];
+
   return (
     <>
       <PageHeader
