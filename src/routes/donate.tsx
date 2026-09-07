@@ -93,15 +93,18 @@ function DonatePage() {
                       tier === t.id ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border bg-card hover:bg-secondary/50"
                     }`}
                   >
-                    <RadioGroupItem
+                    <input
+                      type="radio"
+                      name="tier"
                       value={t.id}
                       checked={tier === t.id}
-                      onClick={() => {
+                      onChange={() => {
                         setTier(t.id as DonationInput["tier"]);
                         if (t.amount > 0) setAmount(t.amount);
                       }}
                       className="sr-only"
                     />
+
                     <span className="font-medium text-foreground">{t.label}</span>
                     <span className="mt-1 text-2xl font-semibold">
                       {t.amount > 0 ? `KES ${t.amount.toLocaleString()}` : "Custom"}
