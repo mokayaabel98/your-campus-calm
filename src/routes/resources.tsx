@@ -345,7 +345,7 @@ function ResourcesPage() {
                     <AccordionContent>
                       <ul className="space-y-2 text-sm leading-relaxed text-muted-foreground">
                         {signs.map((s) => (
-                          <li key={s}>— {s}</li>
+                          <li key={s} className="ms-5 list-disc">{s}</li>
                         ))}
                       </ul>
                     </AccordionContent>
@@ -388,12 +388,12 @@ function ResourcesPage() {
               have lasted more than two weeks, or if they are getting in the way of your day.
             </p>
             <ul className="mt-5 space-y-2.5 text-sm leading-relaxed text-muted-foreground">
-              <li>— Low mood or loss of interest on most days for two weeks or more.</li>
-              <li>— You cannot sleep, or you cannot get out of bed.</li>
-              <li>— Anxiety, dread or panic that is shaping what you will and will not do.</li>
-              <li>— You are using alcohol or substances to cope, or using more than before.</li>
-              <li>— Eating has become something you control, restrict or hide.</li>
-              <li>— Any thought of harming yourself — this one has no waiting period.</li>
+              <li className="ms-5 list-disc">Low mood or loss of interest on most days for two weeks or more.</li>
+              <li className="ms-5 list-disc">You cannot sleep, or you cannot get out of bed.</li>
+              <li className="ms-5 list-disc">Anxiety, dread or panic that is shaping what you will and will not do.</li>
+              <li className="ms-5 list-disc">You are using alcohol or substances to cope, or using more than before.</li>
+              <li className="ms-5 list-disc">Eating has become something you control, restrict or hide.</li>
+              <li className="ms-5 list-disc">Any thought of harming yourself; this one has no waiting period.</li>
             </ul>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground text-pretty">
               Counsellors commonly use brief screening questionnaires such as the PHQ-9 for mood

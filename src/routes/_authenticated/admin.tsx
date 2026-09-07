@@ -1,7 +1,15 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CalendarPlus, CreditCard, LifeBuoy, ScrollText, ShieldCheck, Users } from "lucide-react";
+import {
+  CalendarPlus,
+  CreditCard,
+  LifeBuoy,
+  ScrollText,
+  ShieldCheck,
+  UserPlus,
+  Users,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/site/PageHeader";
@@ -198,6 +206,58 @@ function AdminPage() {
     onError: (e: Error) => toast.error("Could not add slot", { description: e.message }),
   });
 
+  const [newCounsellor, setNewCounsellor] = useState({
+    display_name: "",
+    kind: "professional" as "professional" | "peer",
+    title: "",
+    qualifications: "",
+    focus_areas: "",
+    languages: "",
+    session_fee_kes: "0",
+    supports_online: true,
+    supports_in_person: true,
+    is_approved: true,
+  });
+
+  const addCounsellor = useMutation({
+    mutationFn: async () => {
+      const name = newCounsellor.display_name.trim();
+      if (!name) throw new Error("Add a display name");
+      const fee = Number(newCounsellor.session_fee_kes);
+      if (!Number.isFinite(fee) || fee < 0) throw new Error("Session fee must be zero or more");
+      const list = (v: string) =>
+        v.split(",").map((s) => s.trim()).filter(Boolean);
+      const { error } = await supabase.from("counsellors").insert({
+        display_name: name,
+        kind: newCounsellor.kind,
+        title: newCounsellor.title.trim() || null,
+        qualifications: newCounsellor.qualifications.trim() || null,
+        focus_areas: list(newCounsellor.focus_areas),
+        languages: list(newCounsellor.languages),
+        session_fee_kes: Math.round(fee),
+        supports_online: newCounsellor.supports_online,
+        supports_in_person: newCounsellor.supports_in_person,
+        is_approved: newCounsellor.is_approved,
+        is_active: true,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Counsellor added");
+      setNewCounsellor((s) => ({
+        ...s,
+        display_name: "",
+        title: "",
+        qualifications: "",
+        focus_areas: "",
+        languages: "",
+        session_fee_kes: "0",
+      }));
+      qc.invalidateQueries({ queryKey: ["admin-counsellors"] });
+    },
+    onError: (e: Error) => toast.error("Could not add counsellor", { description: e.message }),
+  });
+
   if (loading || isAdmin.isLoading) {
     return <p className="mx-auto max-w-6xl px-5 py-24 text-sm text-muted-foreground">Checking access…</p>;
   }
@@ -226,6 +286,15 @@ function AdminPage() {
     { label: "Assistance requests", value: String((assistance.data ?? []).length) },
   ];
 
+  const team = counsellors.data ?? [];
+  const teamCounts = [
+    { label: "Total team", value: String(team.length) },
+    { label: "Professional", value: String(team.filter((c) => c.kind === "professional").length) },
+    { label: "Peer", value: String(team.filter((c) => c.kind === "peer").length) },
+    { label: "Approved", value: String(team.filter((c) => c.is_approved).length) },
+    { label: "Active", value: String(team.filter((c) => c.is_active).length) },
+  ];
+
   return (
     <>
       <PageHeader
@@ -244,8 +313,11 @@ function AdminPage() {
           ))}
         </div>
 
-        <Tabs defaultValue="counsellors" className="mt-10">
+        <Tabs defaultValue="team" className="mt-10">
           <TabsList className="flex w-full flex-wrap">
+            <TabsTrigger value="team">
+              <UserPlus className="mr-1.5 size-4" /> Team
+            </TabsTrigger>
             <TabsTrigger value="counsellors">
               <Users className="mr-1.5 size-4" /> Counsellors
             </TabsTrigger>
@@ -263,6 +335,141 @@ function AdminPage() {
               <ScrollText className="mr-1.5 size-4" /> Audit
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="team" className="mt-6 space-y-6">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+              {teamCounts.map((t) => (
+                <div key={t.label} className="rounded-2xl bg-card p-5 ring-1 ring-border">
+                  <p className="text-sm text-muted-foreground">{t.label}</p>
+                  <p className="mt-1 text-2xl font-medium">{t.value}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="grid max-w-3xl gap-5 rounded-3xl bg-card p-7 ring-1 ring-border">
+              <h2 className="text-xl font-medium">Add a counsellor</h2>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <div className="grid gap-2">
+                  <Label htmlFor="c-name">Display name</Label>
+                  <Input
+                    id="c-name"
+                    value={newCounsellor.display_name}
+                    onChange={(e) =>
+                      setNewCounsellor((s) => ({ ...s, display_name: e.target.value }))
+                    }
+                    placeholder="Dr. Amina K."
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Type</Label>
+                  <Select
+                    value={newCounsellor.kind}
+                    onValueChange={(v) =>
+                      setNewCounsellor((s) => ({ ...s, kind: v as "professional" | "peer" }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="professional">Professional counsellor</SelectItem>
+                      <SelectItem value="peer">Peer counsellor</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="c-title">Title</Label>
+                  <Input
+                    id="c-title"
+                    value={newCounsellor.title}
+                    onChange={(e) => setNewCounsellor((s) => ({ ...s, title: e.target.value }))}
+                    placeholder="Clinical psychologist"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="c-fee">Session fee (KES)</Label>
+                  <Input
+                    id="c-fee"
+                    type="number"
+                    min="0"
+                    value={newCounsellor.session_fee_kes}
+                    onChange={(e) =>
+                      setNewCounsellor((s) => ({ ...s, session_fee_kes: e.target.value }))
+                    }
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="c-focus">Focus areas (comma separated)</Label>
+                  <Input
+                    id="c-focus"
+                    value={newCounsellor.focus_areas}
+                    onChange={(e) =>
+                      setNewCounsellor((s) => ({ ...s, focus_areas: e.target.value }))
+                    }
+                    placeholder="Anxiety, Exam stress"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="c-lang">Languages (comma separated)</Label>
+                  <Input
+                    id="c-lang"
+                    value={newCounsellor.languages}
+                    onChange={(e) => setNewCounsellor((s) => ({ ...s, languages: e.target.value }))}
+                    placeholder="English, Kiswahili"
+                  />
+                </div>
+                <div className="grid gap-2 sm:col-span-2">
+                  <Label htmlFor="c-qual">Qualifications</Label>
+                  <Input
+                    id="c-qual"
+                    value={newCounsellor.qualifications}
+                    onChange={(e) =>
+                      setNewCounsellor((s) => ({ ...s, qualifications: e.target.value }))
+                    }
+                    placeholder="MSc Counselling Psychology, licensed"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-6 text-sm">
+                <label className="flex items-center gap-2">
+                  Online sessions
+                  <Switch
+                    checked={newCounsellor.supports_online}
+                    onCheckedChange={(v) =>
+                      setNewCounsellor((s) => ({ ...s, supports_online: v }))
+                    }
+                  />
+                </label>
+                <label className="flex items-center gap-2">
+                  In person
+                  <Switch
+                    checked={newCounsellor.supports_in_person}
+                    onCheckedChange={(v) =>
+                      setNewCounsellor((s) => ({ ...s, supports_in_person: v }))
+                    }
+                  />
+                </label>
+                <label className="flex items-center gap-2">
+                  Approved
+                  <Switch
+                    checked={newCounsellor.is_approved}
+                    onCheckedChange={(v) => setNewCounsellor((s) => ({ ...s, is_approved: v }))}
+                  />
+                </label>
+              </div>
+
+              <Button
+                variant="brand"
+                size="pill-lg"
+                className="justify-self-start"
+                onClick={() => addCounsellor.mutate()}
+                disabled={addCounsellor.isPending}
+              >
+                {addCounsellor.isPending ? "Adding…" : "Add counsellor"}
+              </Button>
+            </div>
+          </TabsContent>
 
           <TabsContent value="counsellors" className="mt-6 grid gap-3">
             {(counsellors.data ?? []).map((c) => (

@@ -1,9 +1,9 @@
 # Roadmap
 
-- [ ] Add a public donation page with one-time and monthly options and M-Pesa/card choices.
-- [ ] Add an admin Team tab with professional/peer counts and a counsellor creation form.
-- [ ] Make all centre email, phone, and WhatsApp details actionable and consistent.
-- [ ] Remove decorative sentence dashes while preserving valid ranges and compound words.
-- [ ] Verify donation, admin, contact, navigation, and payment-related flows.
-- [ ] Connect live card processing when a supported card account is available.
+- [x] Add a public donation page with M-Pesa/card choices.
+- [x] Add an admin Team tab with professional/peer counts and a counsellor creation form.
+- [x] Make all centre email, phone, and WhatsApp details actionable and consistent.
+- [x] Remove decorative sentence dashes while preserving valid ranges and compound words.
+- [x] Reconcile M-Pesa donation callbacks.
+- [ ] Connect live card processing when a supported card account is available (needs your own card account key).
 - [ ] Enable transactional emails when a verified sender domain is available.

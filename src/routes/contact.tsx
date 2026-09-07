@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Clock, Lock, Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Lock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -72,7 +72,7 @@ function ContactPage() {
       <PageHeader
         eyebrow="Contact"
         title="Ask us anything, share as little as you like"
-        intro="General enquiries only — please do not include clinical details here. If you are in crisis, use the Get Help Now page instead."
+        intro="General enquiries only. Please do not include clinical details here. If you are in crisis, use the Get Help Now page instead."
       />
 
       <section className="mx-auto grid max-w-6xl gap-8 px-5 py-16 lg:grid-cols-[1.2fr_1fr]">
@@ -136,19 +136,32 @@ function ContactPage() {
             <ul className="mt-4 space-y-3.5 text-sm text-muted-foreground">
               <li className="flex gap-3">
                 <MapPin className="size-4 shrink-0 text-primary-deep" />
-                Campus Wellbeing Centre, Gate 4, Main Campus, Nairobi
+                Campus Wellbeing Centre, Gate 4, off Nyeri-Mweiga Road, Kenya
               </li>
               <li className="flex gap-3">
                 <Phone className="size-4 shrink-0 text-primary-deep" />
-                <a href="tel:+254200000000" className="hover:text-primary">+254 20 000 0000</a>
+                <a href="tel:+254701203242" className="hover:text-primary">+254 701 203 242</a>
+              </li>
+              <li className="flex gap-3">
+                <MessageCircle className="size-4 shrink-0 text-primary-deep" />
+                <a
+                  href="https://wa.me/254701203242"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="hover:text-primary"
+                >
+                  WhatsApp +254 701 203 242
+                </a>
               </li>
               <li className="flex gap-3">
                 <Mail className="size-4 shrink-0 text-primary-deep" />
-                <a href="mailto:wellbeing@willow.ac.ke" className="hover:text-primary">wellbeing@willow.ac.ke</a>
+                <a href="mailto:support.campuswell@gmail.com" className="hover:text-primary">
+                  support.campuswell@gmail.com
+                </a>
               </li>
               <li className="flex gap-3">
                 <Clock className="size-4 shrink-0 text-primary-deep" />
-                Mon–Fri 8am–6pm · Sat 9am–1pm · Closed Sundays
+                Mon to Fri 8am to 6pm · Sat 9am to 1pm · Closed Sundays
               </li>
             </ul>
           </div>

@@ -58,6 +58,17 @@ export const Route = createFileRoute("/api/public/mpesa/callback")({
               ? `M-Pesa receipt ${receipt}. Your session is confirmed.`
               : resultDesc || "The M-Pesa payment was not completed.",
           });
+        } else {
+          const paid = resultCode === 0;
+          await supabaseAdmin
+            .from("donations")
+            .update({
+              status: paid ? "paid" : "failed",
+              receipt_number: receipt ? String(receipt) : null,
+              result_desc: resultDesc,
+              paid_at: paid ? new Date().toISOString() : null,
+            })
+            .eq("checkout_request_id", checkoutRequestId);
         }
 
         return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });
