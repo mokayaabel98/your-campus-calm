@@ -69,10 +69,10 @@ function PeerPage() {
           <div className="rounded-3xl bg-card p-7 ring-1 ring-border">
             <h2 className="text-2xl font-medium">What peer counselling is</h2>
             <ul className="mt-4 space-y-2.5 text-sm leading-relaxed text-muted-foreground">
-              <li>— A confidential, friendly conversation, in person or by message.</li>
-              <li>— Trained listening, practical campus knowledge and gentle encouragement.</li>
-              <li>— Free, with no limit on how many times you reach out.</li>
-              <li>— A good first step if booking a counsellor feels like too much right now.</li>
+              <li className="ms-5 list-disc">A confidential, friendly conversation, in person or by message.</li>
+              <li className="ms-5 list-disc">Trained listening, practical campus knowledge and gentle encouragement.</li>
+              <li className="ms-5 list-disc">Free, with no limit on how many times you reach out.</li>
+              <li className="ms-5 list-disc">A good first step if booking a counsellor feels like too much right now.</li>
             </ul>
           </div>
           <div className="rounded-3xl bg-urgent-soft p-7 ring-1 ring-urgent/30">
