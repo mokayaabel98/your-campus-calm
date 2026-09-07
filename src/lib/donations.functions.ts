@@ -1,15 +1,26 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+const optionalText = (max: number) =>
+  z
+    .string()
+    .trim()
+    .max(max)
+    .nullish()
+    .transform((v) => v || undefined);
+
 const donationSchema = z.object({
-  donorName: z.string().trim().max(80).optional(),
-  donorEmail: z.string().trim().email().max(255).optional().or(z.literal("")),
-  message: z.string().trim().max(500).optional(),
+  donorName: optionalText(80),
+  donorEmail: optionalText(255).refine(
+    (v) => !v || z.string().email().safeParse(v).success,
+    { message: "Invalid email address" },
+  ),
+  message: optionalText(500),
   tier: z.enum(["bronze", "silver", "gold", "custom"]),
   amount: z.number().positive().max(10_000_000),
   currency: z.enum(["KES", "USD", "EUR", "GBP"]),
   method: z.enum(["mpesa", "card"]),
-  phone: z.string().trim().max(20).optional(),
+  phone: optionalText(20),
 });
 
 export type DonationInput = z.infer<typeof donationSchema>;
