@@ -198,6 +198,58 @@ function AdminPage() {
     onError: (e: Error) => toast.error("Could not add slot", { description: e.message }),
   });
 
+  const [newCounsellor, setNewCounsellor] = useState({
+    display_name: "",
+    kind: "professional" as "professional" | "peer",
+    title: "",
+    qualifications: "",
+    focus_areas: "",
+    languages: "",
+    session_fee_kes: "0",
+    supports_online: true,
+    supports_in_person: true,
+    is_approved: true,
+  });
+
+  const addCounsellor = useMutation({
+    mutationFn: async () => {
+      const name = newCounsellor.display_name.trim();
+      if (!name) throw new Error("Add a display name");
+      const fee = Number(newCounsellor.session_fee_kes);
+      if (!Number.isFinite(fee) || fee < 0) throw new Error("Session fee must be zero or more");
+      const list = (v: string) =>
+        v.split(",").map((s) => s.trim()).filter(Boolean);
+      const { error } = await supabase.from("counsellors").insert({
+        display_name: name,
+        kind: newCounsellor.kind,
+        title: newCounsellor.title.trim() || null,
+        qualifications: newCounsellor.qualifications.trim() || null,
+        focus_areas: list(newCounsellor.focus_areas),
+        languages: list(newCounsellor.languages),
+        session_fee_kes: Math.round(fee),
+        supports_online: newCounsellor.supports_online,
+        supports_in_person: newCounsellor.supports_in_person,
+        is_approved: newCounsellor.is_approved,
+        is_active: true,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Counsellor added");
+      setNewCounsellor((s) => ({
+        ...s,
+        display_name: "",
+        title: "",
+        qualifications: "",
+        focus_areas: "",
+        languages: "",
+        session_fee_kes: "0",
+      }));
+      qc.invalidateQueries({ queryKey: ["admin-counsellors"] });
+    },
+    onError: (e: Error) => toast.error("Could not add counsellor", { description: e.message }),
+  });
+
   if (loading || isAdmin.isLoading) {
     return <p className="mx-auto max-w-6xl px-5 py-24 text-sm text-muted-foreground">Checking access…</p>;
   }
