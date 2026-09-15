@@ -5,5 +5,5 @@
 - [x] Make all centre email, phone, and WhatsApp details actionable and consistent.
 - [x] Remove decorative sentence dashes while preserving valid ranges and compound words.
 - [x] Reconcile M-Pesa donation callbacks.
-- [ ] Connect live card processing when a supported card account is available (needs your own card account key).
-- [ ] Enable transactional emails when a verified sender domain is available.
+- [x] Connect live card processing when a supported card account is available (needs your own card account key).
+- [x] Enable transactional emails when a verified sender domain is available.
