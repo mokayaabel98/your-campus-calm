@@ -25,10 +25,11 @@ export const Route = createFileRoute("/api/public/mpesa/callback")({
         const receipt = items.find((i) => i.Name === "MpesaReceiptNumber")?.Value;
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const { sendDonationReceiptEmail, sendPaymentReceiptEmail, sendAppointmentEmail } = await import("@/lib/email.server");
 
         const { data: payment } = await supabaseAdmin
           .from("payments")
-          .select("id, student_id, appointment_id")
+          .select("id, student_id, appointment_id, amount_kes, reference")
           .eq("checkout_request_id", checkoutRequestId)
           .maybeSingle();
 
@@ -44,11 +45,15 @@ export const Route = createFileRoute("/api/public/mpesa/callback")({
             })
             .eq("id", payment.id);
 
+          let apptInfo: any = null;
           if (paid && payment.appointment_id) {
-            await supabaseAdmin
+            const { data: appt } = await supabaseAdmin
               .from("appointments")
               .update({ status: "confirmed" })
-              .eq("id", payment.appointment_id);
+              .eq("id", payment.appointment_id)
+              .select("id, starts_at, duration_minutes, format, counsellors(display_name, kind)")
+              .maybeSingle();
+            apptInfo = appt;
           }
 
           await supabaseAdmin.from("notifications").insert({
@@ -58,9 +63,43 @@ export const Route = createFileRoute("/api/public/mpesa/callback")({
               ? `M-Pesa receipt ${receipt}. Your session is confirmed.`
               : resultDesc || "The M-Pesa payment was not completed.",
           });
+
+          if (paid) {
+            const { data: profile } = await supabaseAdmin
+              .from("profiles")
+              .select("display_name, contact_email, allow_email_notifications")
+              .eq("id", payment.student_id)
+              .maybeSingle();
+
+            if (profile?.contact_email && (profile.allow_email_notifications ?? true)) {
+              await sendPaymentReceiptEmail({
+                to: profile.contact_email,
+                studentName: profile.display_name,
+                amount: payment.amount_kes,
+                currency: "KES",
+                method: "mpesa",
+                reference: payment.reference,
+                receiptNumber: receipt ? String(receipt) : null,
+              });
+
+              if (apptInfo) {
+                const counsellor = apptInfo.counsellors as { display_name?: string; kind?: "professional" | "peer" } | null;
+                await sendAppointmentEmail({
+                  to: profile.contact_email,
+                  studentName: profile.display_name,
+                  counsellorName: counsellor?.display_name || "Your Counsellor",
+                  counsellorKind: counsellor?.kind || "professional",
+                  startsAt: apptInfo.starts_at,
+                  format: apptInfo.format,
+                  durationMinutes: apptInfo.duration_minutes,
+                  status: "confirmed",
+                });
+              }
+            }
+          }
         } else {
           const paid = resultCode === 0;
-          await supabaseAdmin
+          const { data: donation } = await supabaseAdmin
             .from("donations")
             .update({
               status: paid ? "paid" : "failed",
@@ -68,7 +107,21 @@ export const Route = createFileRoute("/api/public/mpesa/callback")({
               result_desc: resultDesc,
               paid_at: paid ? new Date().toISOString() : null,
             })
-            .eq("checkout_request_id", checkoutRequestId);
+            .eq("checkout_request_id", checkoutRequestId)
+            .select("id, donor_name, donor_email, amount, currency, tier, reference")
+            .maybeSingle();
+
+          if (paid && donation?.donor_email) {
+            await sendDonationReceiptEmail({
+              to: donation.donor_email,
+              donorName: donation.donor_name,
+              amount: donation.amount,
+              currency: donation.currency,
+              tier: donation.tier,
+              reference: donation.reference,
+              receiptNumber: receipt ? String(receipt) : null,
+            });
+          }
         }
 
         return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });

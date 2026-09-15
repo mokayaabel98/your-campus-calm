@@ -17,9 +17,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { formatKes, formatSlot } from "@/lib/booking";
+import { notifyAppointmentBooked } from "@/lib/booking.functions";
 
 export const Route = createFileRoute("/book")({
   head: () => ({
@@ -45,6 +47,7 @@ export const Route = createFileRoute("/book")({
 function BookPage() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const notifyBooked = useServerFn(notifyAppointmentBooked);
 
   const [kind, setKind] = useState<"professional" | "peer">("professional");
   const [counsellorId, setCounsellorId] = useState("");
@@ -137,6 +140,9 @@ function BookPage() {
       body: `We will confirm your ${formatSlot(slot.starts_at)} session shortly.`,
     });
 
+    // Trigger transactional confirmation email (with fallback when unconfigured)
+    await notifyBooked({ data: { appointmentId: appointment.id } }).catch(() => {});
+
     setBusy(false);
     setSlotId("");
     setNote("");
@@ -145,7 +151,7 @@ function BookPage() {
     toast.success("Session requested", {
       description:
         fee > 0
-          ? `Pay ${formatKes(fee)} with M-Pesa from the Payments tab in your dashboard.`
+          ? `Complete payment via M-Pesa or Card from the Payments tab in your dashboard.`
           : "You can see it in your dashboard. We confirm within one working day.",
     });
     navigate({ to: "/dashboard" });

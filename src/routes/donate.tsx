@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { Heart, ShieldCheck, CreditCard, Smartphone } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Heart, ShieldCheck, CreditCard, Smartphone, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/site/PageHeader";
@@ -9,9 +9,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { createDonation, type DonationInput } from "@/lib/donations.functions";
 
 export const Route = createFileRoute("/donate")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    status: typeof search["status"] === "string" ? search["status"] : undefined,
+    ref: typeof search["ref"] === "string" ? search["ref"] : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Donate — Support Student Wellbeing | Willow" },
@@ -33,9 +44,11 @@ const TIERS = [
 ];
 
 function DonatePage() {
+  const search = Route.useSearch();
   const [tier, setTier] = useState<DonationInput["tier"]>("silver");
   const [amount, setAmount] = useState(1500);
   const [method, setMethod] = useState<DonationInput["method"]>("mpesa");
+  const [currency, setCurrency] = useState<DonationInput["currency"]>("KES");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -49,7 +62,7 @@ function DonatePage() {
       message: formData.get("message") as string,
       tier,
       amount: tier === "custom" ? Number(formData.get("customAmount")) : amount,
-      currency: "KES",
+      currency: method === "card" ? currency : "KES",
       method,
       phone: formData.get("phone") as string,
     };
@@ -80,8 +93,40 @@ function DonatePage() {
         intro="Your donations directly fund subsidised counselling sessions and maintain our peer support network. Every contribution helps a student feel less alone."
       />
 
-      <section className="mx-auto max-w-4xl px-5 py-16">
-        <form onSubmit={onSubmit} className="grid gap-8 lg:grid-cols-[1fr_0.8fr]">
+      {search.status === "thanks" ? (
+        <section className="mx-auto max-w-2xl px-5 py-16 text-center">
+          <div className="rounded-3xl bg-card p-10 ring-1 ring-border shadow-soft">
+            <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <Heart className="size-8" />
+            </div>
+            <h2 className="mt-6 text-2xl font-medium">Thank you for your generous support!</h2>
+            <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+              Your donation makes a direct impact on student mental health. A receipt has been sent to your email.
+            </p>
+            {search.ref ? (
+              <div className="mt-6 inline-block rounded-2xl bg-secondary/60 px-5 py-3 text-sm">
+                <span className="text-muted-foreground">Donation Reference: </span>
+                <span className="font-mono font-semibold text-foreground">{search.ref}</span>
+              </div>
+            ) : null}
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <Button asChild variant="brand" size="pill">
+                <Link to="/">Back to Home</Link>
+              </Button>
+              <Button asChild variant="outline" size="pill">
+                <Link to="/donate">Donate Again</Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className="mx-auto max-w-4xl px-5 py-16">
+          {search.status === "cancelled" ? (
+            <div className="mb-8 rounded-2xl border border-border bg-secondary/50 p-4 text-sm text-muted-foreground">
+              Your donation checkout was cancelled. You can try again below whenever you are ready.
+            </div>
+          ) : null}
+          <form onSubmit={onSubmit} className="grid gap-8 lg:grid-cols-[1fr_0.8fr]">
           <div className="space-y-8">
             <div>
               <h2 className="text-xl font-medium">1. Choose an amount</h2>
@@ -175,6 +220,31 @@ function DonatePage() {
                 </label>
               </RadioGroup>
 
+              {method === "card" && (
+                <div className="mt-4 grid gap-2">
+                  <Label htmlFor="currency">Currency</Label>
+                  <Select
+                    value={currency}
+                    onValueChange={(v) => setCurrency(v as DonationInput["currency"])}
+                  >
+                    <SelectTrigger id="currency">
+                      <SelectValue placeholder="Select currency" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="KES">Kenyan Shilling (KES)</SelectItem>
+                      <SelectItem value="USD">US Dollar (USD)</SelectItem>
+                      <SelectItem value="EUR">Euro (EUR)</SelectItem>
+                      <SelectItem value="GBP">British Pound (GBP)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {currency !== "KES" ? (
+                    <p className="text-xs text-muted-foreground">
+                      Your card will be charged in {currency}.
+                    </p>
+                  ) : null}
+                </div>
+              )}
+
               {method === "mpesa" && (
                 <div className="mt-4 grid gap-2">
                   <Label htmlFor="phone">M-Pesa number</Label>
@@ -213,6 +283,7 @@ function DonatePage() {
           </div>
         </form>
       </section>
+      )}
     </>
   );
 }

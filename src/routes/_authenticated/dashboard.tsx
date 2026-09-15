@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Bell, CalendarDays, CreditCard, LogOut, UserCog } from "lucide-react";
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/site/PageHeader";
 import { MpesaPayButton } from "@/components/site/MpesaPayButton";
+import { CardPayButton } from "@/components/site/CardPayButton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -62,8 +63,13 @@ function useIdleLogout() {
 
 function Dashboard() {
   const navigate = useNavigate();
+  const search = Route.useSearch();
   const qc = useQueryClient();
   useIdleLogout();
+
+  const [activeTab, setActiveTab] = useState<string>(
+    search.payment ? "payments" : search.tab || "appointments",
+  );
 
   const appointments = useQuery({
     queryKey: ["my-appointments"],
@@ -144,6 +150,20 @@ function Dashboard() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["my-notifications"] }),
   });
 
+  useEffect(() => {
+    if (search.payment === "success") {
+      toast.success("Card payment received!", {
+        description: "Your session is confirmed. We also sent you a receipt email.",
+      });
+      appointments.refetch();
+      payments.refetch();
+    } else if (search.payment === "cancelled") {
+      toast.info("Card payment cancelled", {
+        description: "You can retry paying whenever you are ready.",
+      });
+    }
+  }, [search.payment]);
+
   const [saving, setSaving] = useState(false);
   async function saveProfile(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -199,7 +219,31 @@ function Dashboard() {
       </PageHeader>
 
       <section className="mx-auto max-w-6xl px-5 py-14">
-        <Tabs defaultValue="appointments">
+        {search.payment === "success" && (
+          <div className="mb-6 flex items-start gap-3 rounded-2xl border border-primary/30 bg-primary/10 p-4 text-sm">
+            <div className="mt-0.5 rounded-full bg-primary p-1 text-primary-foreground">
+              <svg
+                className="size-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-semibold text-foreground">Card payment received</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Your payment has been confirmed and receipt details have been sent to your email.
+              </p>
+            </div>
+          </div>
+        )}
+
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="flex w-full flex-wrap">
             <TabsTrigger value="appointments">
               <CalendarDays className="mr-1.5 size-4" /> Appointments
@@ -303,15 +347,27 @@ function Dashboard() {
                     Ref {p.reference} · {p.method}
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-2">
                   <Badge variant={p.status === "paid" ? "default" : "secondary"}>{p.status}</Badge>
-                  {p.status !== "paid" && p.status !== "waived" && p.method === "mpesa" ? (
-                    <MpesaPayButton
-                      paymentId={p.id}
-                      amountKes={p.amount_kes}
-                      defaultPhone={profile.data?.phone ?? null}
-                      onPaid={() => payments.refetch()}
-                    />
+                  {p.status !== "paid" && p.status !== "waived" ? (
+                    <div className="flex flex-wrap items-center gap-2">
+                      <MpesaPayButton
+                        paymentId={p.id}
+                        amountKes={p.amount_kes}
+                        defaultPhone={profile.data?.phone ?? null}
+                        onPaid={() => {
+                          payments.refetch();
+                          appointments.refetch();
+                        }}
+                      />
+                      <CardPayButton
+                        paymentId={p.id}
+                        amountKes={p.amount_kes}
+                        onInitiated={() => {
+                          payments.refetch();
+                        }}
+                      />
+                    </div>
                   ) : null}
                 </div>
               </div>

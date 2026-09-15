@@ -4,27 +4,31 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { useServerFn } from "@tanstack/react-start";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { sendContactEnquiry } from "@/lib/contact.functions";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact the Counselling Centre — Willow" },
+      { title: "Contact Us | Willow Student Wellbeing" },
       {
         name: "description",
         content:
-          "Send a secure enquiry, find our opening hours and campus location, or get urgent support contacts.",
+          "Reach out to the Willow counselling team for non-emergency enquiries, referrals or questions about services.",
       },
-      { property: "og:title", content: "Contact the Counselling Centre — Willow" },
+      { property: "og:title", content: "Contact Willow" },
       {
         property: "og:description",
-        content: "Secure contact form, opening hours, campus location and emergency contacts.",
+        content: "Non-emergency enquiries, confidential questions and centre contact details.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: ContactPage,
@@ -46,12 +50,15 @@ const schema = z.object({
 });
 
 function ContactPage() {
+  const sendFn = useServerFn(sendContactEnquiry);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [consent, setConsent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const form = new FormData(e.currentTarget);
+    const formElement = e.currentTarget;
+    const form = new FormData(formElement);
     const result = schema.safeParse(Object.fromEntries(form));
     if (!result.success) {
       const next: Record<string, string> = {};
@@ -60,11 +67,25 @@ function ContactPage() {
       return;
     }
     setErrors({});
-    e.currentTarget.reset();
-    setConsent(false);
-    toast.success("Message sent securely", {
-      description: "We reply within one working day. Nothing you wrote is visible to other students.",
-    });
+    setSubmitting(true);
+    try {
+      const res = await sendFn({ data: result.data });
+      if (res.ok) {
+        formElement.reset();
+        setConsent(false);
+        toast.success("Message sent securely", {
+          description: res.message,
+        });
+      } else {
+        toast.error("Could not send message", { description: res.message });
+      }
+    } catch {
+      toast.error("Error sending message", {
+        description: "Please try again later or email support.campuswell@gmail.com directly.",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -125,8 +146,8 @@ function ContactPage() {
             </span>
           </label>
 
-          <Button type="submit" variant="brand" size="pill-lg" className="mt-6" disabled={!consent}>
-            Send securely
+          <Button type="submit" variant="brand" size="pill-lg" className="mt-6" disabled={!consent || submitting}>
+            {submitting ? "Sending securely…" : "Send securely"}
           </Button>
         </form>
 
