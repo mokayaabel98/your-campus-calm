@@ -63,7 +63,7 @@ function useIdleLogout() {
 
 function Dashboard() {
   const navigate = useNavigate();
-  const search = Route.useSearch();
+  const search = useSearch({ strict: false }) as { payment?: "success" | "cancelled"; tab?: string };
   const qc = useQueryClient();
   useIdleLogout();
 
