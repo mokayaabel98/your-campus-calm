@@ -26,6 +26,8 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa/callback'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe/webhook'
+import { Route as ApiPublicPaystackCallbackRouteImport } from './routes/api/public/paystack/callback'
+import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack/webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -111,6 +113,16 @@ const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
   path: '/api/public/stripe/webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicPaystackCallbackRoute = ApiPublicPaystackCallbackRouteImport.update({
+  id: '/api/public/paystack/callback',
+  path: '/api/public/paystack/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicPaystackWebhookRoute = ApiPublicPaystackWebhookRouteImport.update({
+  id: '/api/public/paystack/webhook',
+  path: '/api/public/paystack/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -129,6 +141,8 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
   '/api/public/stripe/webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/public/paystack/callback': typeof ApiPublicPaystackCallbackRoute
+  '/api/public/paystack/webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -187,6 +201,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/api/public/mpesa/callback'
     | '/api/public/stripe/webhook'
+    | '/api/public/paystack/callback'
+    | '/api/public/paystack/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -242,6 +258,8 @@ export interface RootRouteChildren {
   ResourcesRoute: typeof ResourcesRoute
   ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
+  ApiPublicPaystackCallbackRoute: typeof ApiPublicPaystackCallbackRoute
+  ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -365,6 +383,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/paystack/callback': {
+      id: '/api/public/paystack/callback'
+      path: '/api/public/paystack/callback'
+      fullPath: '/api/public/paystack/callback'
+      preLoaderRoute: typeof ApiPublicPaystackCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/paystack/webhook': {
+      id: '/api/public/paystack/webhook'
+      path: '/api/public/paystack/webhook'
+      fullPath: '/api/public/paystack/webhook'
+      preLoaderRoute: typeof ApiPublicPaystackWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -397,6 +429,8 @@ const rootRouteChildren: RootRouteChildren = {
   ResourcesRoute: ResourcesRoute,
   ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
+  ApiPublicPaystackCallbackRoute: ApiPublicPaystackCallbackRoute,
+  ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
