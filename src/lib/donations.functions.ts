@@ -58,33 +58,34 @@ export const createDonation = createServerFn({ method: "POST" })
     }
 
     if (data.method === "card") {
-      const { createCheckoutSession, stripeConfigured } = await import("./stripe.server");
-      if (!stripeConfigured()) {
+      if (!data.donorEmail) return { ok: false as const, message: "Enter an email address for your Paystack receipt." };
+      const { initializePaystackTransaction, paystackConfigured } = await import("./paystack.server");
+      if (!paystackConfigured()) {
         return {
           ok: false as const,
           message:
-            "Card donations are not switched on yet. Please use M-Pesa, or contact us at support.campuswell@gmail.com.",
+            "Paystack card donations are not switched on yet. Please use M-Pesa, or contact us at support.campuswell@gmail.com.",
         };
       }
       try {
         const origin = siteOrigin();
-        const session = await createCheckoutSession({
+        const session = await initializePaystackTransaction({
           amount: data.amount,
           currency: data.currency,
           productName: "Donation to Willow Student Wellbeing",
           description: `${data.tier} supporter`,
-          successUrl: `${origin}/donate?status=thanks&ref=${donation.reference}`,
-          cancelUrl: `${origin}/donate?status=cancelled`,
-          email: data.donorEmail || undefined,
+          callbackUrl: `${origin}/api/public/paystack/callback`,
+          email: data.donorEmail,
           reference: donation.reference,
           kind: "donation",
           recordId: donation.id,
+          productName: "Donation to Willow Student Wellbeing",
         });
         await supabaseAdmin
           .from("donations")
-          .update({ checkout_request_id: session.id })
+          .update({ checkout_request_id: session.reference, result_desc: "Paystack checkout initialized" })
           .eq("id", donation.id);
-        return { ok: true as const, redirectUrl: session.url, message: "Redirecting to secure card checkout" };
+        return { ok: true as const, redirectUrl: session.authorizationUrl, message: "Redirecting to secure card checkout" };
       } catch (e) {
         return {
           ok: false as const,
