@@ -26,7 +26,7 @@ const donationSchema = z.object({
 export type DonationInput = z.infer<typeof donationSchema>;
 
 function siteOrigin() {
-  return process.env["PUBLIC_SITE_URL"] || "https://your-campus-calm.lovable.app";
+  return process.env["PUBLIC_SITE_URL"] || "https://your-campus-calm.vercel.app";
 }
 
 export const createDonation = createServerFn({ method: "POST" })
