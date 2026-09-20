@@ -50,7 +50,7 @@ export const createCardCheckout = createServerFn({ method: "POST" })
       ? payment.amount_kes
       : Math.max(1, Math.round(payment.amount_kes * rate * 100) / 100);
 
-    const origin = process.env["PUBLIC_SITE_URL"] || "https://your-campus-calm.lovable.app";
+    const origin = process.env["PUBLIC_SITE_URL"] || "https://your-campus-calm.vercel.app";
 
     try {
       const session = await initializePaystackTransaction({
