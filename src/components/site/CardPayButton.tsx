@@ -62,7 +62,7 @@ export function CardPayButton({ paymentId, amountKes, onInitiated }: Props) {
     try {
       const result = await checkoutFn({ data: { paymentId, currency } });
       if (result.ok && result.redirectUrl) {
-        toast.info("Redirecting to Stripe", {
+        toast.info("Redirecting to Paystack", {
           description: "Complete your card payment on the secure checkout page.",
         });
         onInitiated?.();
@@ -132,7 +132,7 @@ export function CardPayButton({ paymentId, amountKes, onInitiated }: Props) {
           <div className="flex items-start gap-2.5 rounded-xl border border-border/80 bg-background p-3 text-xs text-muted-foreground">
             <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" />
             <span>
-              Encrypted end-to-end via Stripe. Your card information never touches our servers.
+              Encrypted end-to-end via Paystack. Your card information never touches our servers.
             </span>
           </div>
         </div>
@@ -149,7 +149,7 @@ export function CardPayButton({ paymentId, amountKes, onInitiated }: Props) {
               "Preparing checkout…"
             ) : (
               <>
-                Continue to Stripe ({formattedConverted}) <ExternalLink className="ml-1 size-3.5" />
+                Continue to Paystack ({formattedConverted}) <ExternalLink className="ml-1 size-3.5" />
               </>
             )}
           </Button>
