@@ -309,3 +309,13 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+
+## Paystack card payments
+
+Card and donation checkout uses Paystack's hosted checkout. Configure these server-side environment variables (never commit them):
+
+- `PAYSTACK_SECRET_KEY` — your Paystack live or test secret key
+- `PUBLIC_SITE_URL` — the public site origin used for the Paystack callback
+
+Set the Paystack webhook URL to `https://YOUR_DOMAIN/api/public/paystack/webhook`. Successful transactions are signed and verified server-side before a payment or donation is marked paid.
