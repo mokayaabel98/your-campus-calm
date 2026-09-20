@@ -268,7 +268,7 @@ function DonatePage() {
               <div className="flex items-start gap-3">
                 <ShieldCheck className="mt-0.5 size-4 shrink-0 text-primary" />
                 <p>
-                  Payments are processed securely via M-Pesa or Stripe. Willow does not store your
+                  Payments are processed securely via M-Pesa or Paystack. Willow does not store your
                   financial details.
                 </p>
               </div>
