@@ -33,14 +33,17 @@ export const createCardCheckout = createServerFn({ method: "POST" })
       return { ok: false as const, message: "This session is already paid for" };
     }
 
-    const { createCheckoutSession, stripeConfigured } = await import("./stripe.server");
-    if (!stripeConfigured()) {
+    const { initializePaystackTransaction, paystackConfigured } = await import("./paystack.server");
+    if (!paystackConfigured()) {
       return {
         ok: false as const,
         message:
-          "Card payments are not switched on yet. Please use M-Pesa for now, or email support.campuswell@gmail.com.",
+          "Paystack card payments are not switched on yet. Please use M-Pesa for now, or email support.campuswell@gmail.com.",
       };
     }
+
+    const email = context.claims?.email as string | undefined;
+    if (!email) return { ok: false as const, message: "Add an email address to your account before paying by card." };
 
     const rate = RATE_FROM_KES[data.currency] ?? 1;
     const amount = data.currency === "KES"
@@ -50,26 +53,26 @@ export const createCardCheckout = createServerFn({ method: "POST" })
     const origin = process.env["PUBLIC_SITE_URL"] || "https://your-campus-calm.lovable.app";
 
     try {
-      const session = await createCheckoutSession({
+      const session = await initializePaystackTransaction({
         amount,
         currency: data.currency,
         productName: "Willow counselling session",
         description: `Reference ${payment.reference}`,
-        successUrl: `${origin}/dashboard?payment=success`,
-        cancelUrl: `${origin}/dashboard?payment=cancelled`,
-        email: context.claims?.email as string | undefined,
+        callbackUrl: `${origin}/api/public/paystack/callback`,
+        email,
         reference: payment.reference,
         kind: "session",
         recordId: payment.id,
+        productName: "Willow counselling session",
       });
 
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
       await supabaseAdmin
         .from("payments")
-        .update({ method: "card", status: "pending", checkout_request_id: session.id })
+        .update({ method: "card", status: "pending", checkout_request_id: session.reference, result_desc: "Paystack checkout initialized" })
         .eq("id", payment.id);
 
-      return { ok: true as const, redirectUrl: session.url, message: "Opening secure card checkout" };
+      return { ok: true as const, redirectUrl: session.authorizationUrl, message: "Opening secure card checkout" };
     } catch (e) {
       return {
         ok: false as const,
