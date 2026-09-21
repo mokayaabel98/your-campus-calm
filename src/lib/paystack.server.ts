@@ -21,7 +21,7 @@ export async function initializePaystackTransaction(opts: { amount: number; curr
     headers: { Authorization: "Bearer " + secretKey(), "content-type": "application/json" },
     body: JSON.stringify({
       email: opts.email, amount: String(subunitAmount(opts.amount)), currency: opts.currency.toUpperCase(), reference, callback_url: opts.callbackUrl, channels: ["card"],
-      metadata: JSON.stringify({ kind: opts.kind, record_id: opts.recordId, product_name: opts.productName }),
+      metadata: { kind: opts.kind, record_id: opts.recordId, product_name: opts.productName },
     }),
   });
   const json = await res.json() as { status?: boolean; message?: string; data?: { authorization_url?: string; access_code?: string; reference?: string } };
@@ -41,8 +41,10 @@ export async function verifyPaystackSignature(payload: string, signature: string
   if (!secret || !signature) return false;
   const { createHmac, timingSafeEqual } = await import("crypto");
   const expected = createHmac("sha512", secret).update(payload).digest("hex");
-  const a = Buffer.from(signature); const b = Buffer.from(expected);
-  return a.length === b.length && timingSafeEqual(a, b);
+  // Signature and digest are hex strings; decode as hex so the bytes match.
+  const a = Buffer.from(signature, "hex");
+  const b = Buffer.from(expected, "hex");
+  return a.length === b.length && a.length > 0 && timingSafeEqual(a, b);
 }
 
 export async function settlePaystackTransaction(reference: string) {

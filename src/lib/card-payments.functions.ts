@@ -57,13 +57,11 @@ export const createCardCheckout = createServerFn({ method: "POST" })
         amount,
         currency: data.currency,
         productName: "Willow counselling session",
-        description: `Reference ${payment.reference}`,
         callbackUrl: `${origin}/api/public/paystack/callback`,
         email,
         reference: payment.reference,
         kind: "session",
         recordId: payment.id,
-        productName: "Willow counselling session",
       });
 
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");

@@ -34,9 +34,11 @@ async function getAccessToken() {
 }
 
 function timestamp() {
-  const d = new Date();
+  // Daraja expects the timestamp in East Africa Time (UTC+3), not the server's
+  // own timezone. Servers run in UTC, which makes Safaricom reject the password.
+  const d = new Date(Date.now() + 3 * 60 * 60 * 1000);
   const p = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`;
+  return `${d.getUTCFullYear()}${p(d.getUTCMonth() + 1)}${p(d.getUTCDate())}${p(d.getUTCHours())}${p(d.getUTCMinutes())}${p(d.getUTCSeconds())}`;
 }
 
 export async function stkPush(opts: {
@@ -46,8 +48,9 @@ export async function stkPush(opts: {
   description: string;
   callbackUrl: string;
 }) {
-  const shortcode = process.env["DARAJA_SHORTCODE"]!;
-  const passkey = process.env["DARAJA_PASSKEY"]!;
+  const shortcode = process.env["DARAJA_SHORTCODE"];
+  const passkey = process.env["DARAJA_PASSKEY"];
+  if (!shortcode || !passkey) throw new Error("M-Pesa is not configured");
   const ts = timestamp();
   const password = Buffer.from(`${shortcode}${passkey}${ts}`).toString("base64");
   const token = await getAccessToken();

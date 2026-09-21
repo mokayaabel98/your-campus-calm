@@ -73,13 +73,11 @@ export const createDonation = createServerFn({ method: "POST" })
           amount: data.amount,
           currency: data.currency,
           productName: "Donation to Willow Student Wellbeing",
-          description: `${data.tier} supporter`,
           callbackUrl: `${origin}/api/public/paystack/callback`,
           email: data.donorEmail,
           reference: donation.reference,
           kind: "donation",
           recordId: donation.id,
-          productName: "Donation to Willow Student Wellbeing",
         });
         await supabaseAdmin
           .from("donations")
