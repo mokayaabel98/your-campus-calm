@@ -3,6 +3,19 @@
 
 const RESEND_API = "https://api.resend.com/emails";
 
+// User-supplied strings (contact form name/subject/message, donor name, etc.)
+// are interpolated into these HTML email templates below. Escape them so a
+// submission like `<img src=x onerror=...>` can't inject markup or scripts
+// into the rendered email.
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export function emailConfigured(): boolean {
   return Boolean(process.env["RESEND_API_KEY"]);
 }
@@ -134,7 +147,7 @@ export async function sendAppointmentEmail(opts: {
       ? `Session Confirmed: ${opts.counsellorName} on ${formattedDate}`
       : `Session Requested: ${opts.counsellorName} on ${formattedDate}`;
 
-  const greeting = opts.studentName ? `Hi ${opts.studentName},` : "Hello,";
+  const greeting = opts.studentName ? `Hi ${escapeHtml(opts.studentName)},` : "Hello,";
 
   const html = emailWrapper(`
     <h2 style="margin: 0 0 16px; font-size: 18px; color: #0f172a;">
@@ -153,7 +166,7 @@ export async function sendAppointmentEmail(opts: {
       <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
         <tr>
           <td style="padding: 6px 0; color: #64748b;">Counsellor:</td>
-          <td style="padding: 6px 0; font-weight: 600; text-align: right;">${opts.counsellorName} (${opts.counsellorKind === "peer" ? "Peer Counsellor" : "Professional Counsellor"})</td>
+          <td style="padding: 6px 0; font-weight: 600; text-align: right;">${escapeHtml(opts.counsellorName)} (${opts.counsellorKind === "peer" ? "Peer Counsellor" : "Professional Counsellor"})</td>
         </tr>
         <tr>
           <td style="padding: 6px 0; color: #64748b;">Date & Time:</td>
@@ -199,7 +212,7 @@ export async function sendPaymentReceiptEmail(opts: {
   receiptNumber?: string | null;
 }) {
   const subject = `Payment Receipt: ${opts.currency} ${opts.amount.toLocaleString()} (Ref: ${opts.reference})`;
-  const greeting = opts.studentName ? `Hi ${opts.studentName},` : "Hello,";
+  const greeting = opts.studentName ? `Hi ${escapeHtml(opts.studentName)},` : "Hello,";
 
   const html = emailWrapper(`
     <h2 style="margin: 0 0 16px; font-size: 18px; color: #0f172a;">Payment Received</h2>
@@ -258,7 +271,7 @@ export async function sendDonationReceiptEmail(opts: {
   receiptNumber?: string | null;
 }) {
   const subject = `Thank you for supporting Willow! Donation Receipt (Ref: ${opts.reference})`;
-  const greeting = opts.donorName ? `Dear ${opts.donorName},` : "Dear Supporter,";
+  const greeting = opts.donorName ? `Dear ${escapeHtml(opts.donorName)},` : "Dear Supporter,";
 
   const html = emailWrapper(`
     <h2 style="margin: 0 0 16px; font-size: 18px; color: #064e3b;">Thank you for your generous support!</h2>
@@ -311,16 +324,20 @@ export async function sendContactNotificationEmails(opts: {
   message: string;
 }) {
   // 1. Acknowledgement to the sender
+  const safeName = escapeHtml(opts.studentName);
+  const safeSubject = escapeHtml(opts.subject);
+  const safeMessage = escapeHtml(opts.message);
+
   const studentHtml = emailWrapper(`
     <h2 style="margin: 0 0 16px; font-size: 18px; color: #0f172a;">We received your enquiry</h2>
-    <p style="margin: 0 0 20px;">Hi ${opts.studentName},</p>
+    <p style="margin: 0 0 20px;">Hi ${safeName},</p>
     <p style="margin: 0 0 20px;">
-      Thank you for reaching out to Willow. We have received your message regarding "<strong>${opts.subject}</strong>" and our team will get back to you within one working day.
+      Thank you for reaching out to Willow. We have received your message regarding "<strong>${safeSubject}</strong>" and our team will get back to you within one working day.
     </p>
 
     <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 20px; font-size: 14px; color: #475569;">
       <p style="margin: 0 0 6px; font-weight: 600; color: #1e293b;">Your message:</p>
-      <p style="margin: 0; white-space: pre-wrap;">${opts.message}</p>
+      <p style="margin: 0; white-space: pre-wrap;">${safeMessage}</p>
     </div>
 
     <p style="margin: 0; font-size: 13px; color: #64748b;">
@@ -339,12 +356,12 @@ export async function sendContactNotificationEmails(opts: {
   const supportHtml = emailWrapper(`
     <h2 style="margin: 0 0 16px; font-size: 18px; color: #064e3b;">New Student Enquiry Received</h2>
     <div style="background-color: #f1f5f9; border-radius: 12px; padding: 16px; margin-bottom: 20px; font-size: 14px;">
-      <p style="margin: 0 0 6px;"><strong>From:</strong> ${opts.studentName} (${opts.studentEmail})</p>
-      <p style="margin: 0 0 6px;"><strong>Subject:</strong> ${opts.subject}</p>
+      <p style="margin: 0 0 6px;"><strong>From:</strong> ${safeName} (${escapeHtml(opts.studentEmail)})</p>
+      <p style="margin: 0 0 6px;"><strong>Subject:</strong> ${safeSubject}</p>
       <p style="margin: 0 0 6px;"><strong>Date:</strong> ${new Date().toISOString()}</p>
     </div>
     <div style="padding: 16px; border-left: 3px solid #059669; background-color: #f8fafc; font-size: 14px;">
-      <p style="margin: 0; white-space: pre-wrap;">${opts.message}</p>
+      <p style="margin: 0; white-space: pre-wrap;">${safeMessage}</p>
     </div>
   `);
 
