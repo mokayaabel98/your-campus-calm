@@ -29,9 +29,17 @@ export const Route = createFileRoute("/api/public/mpesa/callback")({
 
         const { data: payment } = await supabaseAdmin
           .from("payments")
-          .select("id, student_id, appointment_id, amount_kes, reference")
+          .select("id, student_id, appointment_id, amount_kes, reference, status")
           .eq("checkout_request_id", checkoutRequestId)
           .maybeSingle();
+
+        // Safaricom retries the callback if it doesn't get a fast 200, so this
+        // can be delivered more than once for the same transaction. Without
+        // this guard a retry would re-send confirmation emails and re-run the
+        // appointment-confirmation update every time.
+        if (payment && (payment.status === "paid" || payment.status === "failed")) {
+          return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });
+        }
 
         if (payment) {
           const paid = resultCode === 0;
@@ -98,6 +106,16 @@ export const Route = createFileRoute("/api/public/mpesa/callback")({
             }
           }
         } else {
+          const { data: existingDonation } = await supabaseAdmin
+            .from("donations")
+            .select("status")
+            .eq("checkout_request_id", checkoutRequestId)
+            .maybeSingle();
+
+          if (existingDonation && (existingDonation.status === "paid" || existingDonation.status === "failed")) {
+            return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });
+          }
+
           const paid = resultCode === 0;
           const { data: donation } = await supabaseAdmin
             .from("donations")
